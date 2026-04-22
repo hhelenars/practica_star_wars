@@ -1,8 +1,12 @@
-import pandas as pd
+
 
 class SensibleALaFuerza:
 
-    def __init__(self, nombre, rango, nivelpoder, movil, listamaestros=list(), listaalumnos=list()):
+    def __init__(self, nombre, rango, nivelpoder, movil, listamaestros=None, listaalumnos=None):
+        if listamaestros is None:
+            listamaestros = []
+        if listaalumnos is None:
+            listaalumnos = []
         self.__id = None
         self.__nombre = nombre
         self.__rango = rango
@@ -77,8 +81,7 @@ class SensibleALaFuerza:
 
 
     def to_dict (self):
-        return {'ID': self.__id,
-            'Nombre': self.nombre,
+        return {'Nombre': self.nombre,
                 'Bando': self.__class__.__name__,
                 'Rango': self.rango,
                 'Nivel de poder': self.nivelpoder,

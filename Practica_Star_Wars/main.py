@@ -1,5 +1,4 @@
 import sys
-import pandas as pd
 from colorama import Fore, Style, init
 from Agenda import Agenda
 from Fuerza import Fuerza
@@ -122,23 +121,28 @@ def modificar_usuario(usuarioseleccionado):
             print("Introduzca números entre [1-4]")
             return modificar_usuario(usuarioseleccionado)
 
+    if usuarioseleccionado.__class__.__name__ == "Fuerza":
+        usuariomodificado = Fuerza(usuarioseleccionado.nombre, None, None, None)
+    else:
+        usuariomodificado = LadoOscuro(usuarioseleccionado.nombre, None, None, None)
+
     if '1' in cambiar:
         nombrenuevo = pedir_nombre()
-        usuarioseleccionado.nombre = nombrenuevo
+        usuariomodificado.nombre = nombrenuevo
     if '2' in cambiar:
         movil = pedir_movil()
-        usuarioseleccionado.movil = movil
+        usuariomodificado.movil = movil
     if '3' in cambiar:
-        if usuarioseleccionado.__class__.__name__ == "Fuerza":
+        if usuariomodificado.__class__.__name__ == "Fuerza":
             rango = pedir_rango_fuerza()
         else :
             rango = pedir_rango_ladooscuro()
-        usuarioseleccionado.rango = rango
+        usuariomodificado.rango = rango
     if '4' in cambiar:
         nivelpoder = pedir_nivelpoder()
-        usuarioseleccionado.nivelpoder = nivelpoder
+        usuariomodificado.nivelpoder = nivelpoder
 
-    return usuarioseleccionado
+    return usuariomodificado
 
 def buscar_usuario():
     print("-------------------------------------------")
@@ -185,16 +189,19 @@ def menu_agenda():
     print("4. Eliminar un sith/jedi.")
     print("5. Buscar por nombre, por rango o por nivel de poder.")
     print("6. Mostrar toda la agenda")
-    print("7. Cambiara de lado a un sith/jedi.")
-    print("8. Asignar maestros a un sith/jedi.")
-    print("9. Eliminar maestros a un sith/jedi.")
-    print("10. Favoritos")
-    print("11. Crear un excel de contactos")
-    print("12. Salir")
+    print("7. Mostrar solo a los jedi")
+    print("8. Mostrar solo a los sith")
+    print("9. Cambiara de lado a un sith/jedi.")
+    print("10. Asignar maestros a un sith/jedi.")
+    print("11. Eliminar maestros a un sith/jedi.")
+    print("12. Favoritos")
+    print("13. Crear un excel de contactos")
+    print("14. Salir")
     print("-------------------------------------------")
     instruccion = pedir_instruccion()
-    while instruccion < 1 or instruccion > 12:
-        print("El numero es incorrecto")
+    while instruccion < 1 or instruccion > 14:
+
+        print(Fore.RED+ Style.BRIGHT +  "El numero es incorrecto"+ Style.RESET_ALL)
         instruccion = pedir_instruccion()
     return instruccion
 
@@ -241,7 +248,13 @@ while True:
 
         case 5:
             query = buscar_usuario()
-            print(agenda.buscar(query))
+            resultado = agenda.buscar(query)
+            print(Fore.YELLOW + Style.BRIGHT)
+            if resultado.empty :
+                print(resultado)
+            else:
+                print("No existe ningun usuario con esas caracteristicas")
+            print(Style.RESET_ALL)
 
         case 6:
             print("-------------------------------------------")
@@ -251,13 +264,27 @@ while True:
             print(Style.RESET_ALL)
 
         case 7:
+            print("-------------------------------------------")
+            print("AGENDA DE LOS JEDI")
+            print(Fore.YELLOW + Style.BRIGHT)
+            print(agenda.mortar_bando("Fuerza"))
+            print(Style.RESET_ALL)
+
+        case 8:
+            print("-------------------------------------------")
+            print("AGENDA DE LOS JEDI SITH")
+            print(Fore.YELLOW + Style.BRIGHT)
+            print(agenda.mortar_bando("LadoOscuro"))
+            print(Style.RESET_ALL)
+
+        case 9:
             usuario = indentificar_usuario()
             print("-------------------------------------------")
             print("CAMBIAR DE BANDO")
             bando = pedir_bando()
             print(Fore.YELLOW + Style.BRIGHT + agenda.cambiar_bando(usuario, bando) + Style.RESET_ALL)
 
-        case 8:
+        case 10:
             usuarioalumno = indentificar_usuario()
             print("-------------------------------------------")
             print("ASIGNAR UN MAESTRO A UN USUARIO")
@@ -265,7 +292,7 @@ while True:
             usuariomaestro = indentificar_usuario()
             print(Fore.YELLOW + Style.BRIGHT + agenda.asignar_maestro(usuarioalumno, usuariomaestro) + Style.RESET_ALL)
 
-        case 9:
+        case 11:
             usuarioalumno = indentificar_usuario()
             print("-------------------------------------------")
             print("ELIMINAR UN MAESTRO A UN USUARIO")
@@ -274,7 +301,7 @@ while True:
             print(Fore.YELLOW + Style.BRIGHT + agenda.quitar_maestro(usuarioalumno, usuariomaestro) + Style.RESET_ALL)
 
 
-        case 10:
+        case 12:
             instruccion_facorito = menu_favoritos()
             match instruccion_facorito:
                 case 1:
@@ -291,12 +318,12 @@ while True:
                     print(Fore.YELLOW + Style.BRIGHT)
                     print(agenda.mostrar_favoritos())
                     print(Style.RESET_ALL)
-        case 11:
+        case 13:
             print("-------------------------------------------")
             print("CREAR UN EXCEL")
             print(Fore.YELLOW + Style.BRIGHT + agenda.crear_excel_contactos() + Style.RESET_ALL)
 
-        case 12:
+        case 14:
             print("QUE LA FUERZA TE ACOMPAÑE")
             sys.exit()
 

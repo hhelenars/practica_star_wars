@@ -38,8 +38,8 @@ class Agenda:
                 return True, usuario
         return False, None
 
-    def __pasar_lista_dataframe(self):
-        listadiccionario = [usuario.to_dict() for usuario in self.__todos_los_usuarios()]
+    def __pasar_lista_dataframe(self, lista):
+        listadiccionario = [usuario.to_dict() for usuario in lista]
         return pd.DataFrame(listadiccionario)
 
     def __pasar_lista_dataframe_favoritos(self):
@@ -77,6 +77,15 @@ class Agenda:
         if not error:
             return f"El usuario {usuariosensiblealafuerza.nombre} no existe"
 
+        if modificacion.nombre is None:
+            modificacion.nombre = usuarioexixtente.nombre
+        if modificacion.movil is None:
+            modificacion.movil = usuarioexixtente.movil
+        if modificacion.rango is None:
+            modificacion.rango = usuarioexixtente.rango
+        if modificacion.nivelpoder is None:
+            modificacion.nivelpoder = usuarioexixtente.nivelpoder
+
         listabando = self.__obtener_lista_por_usuario(usuariosensiblealafuerza)
         indice = listabando.index(usuarioexixtente)
         listabando[indice] = modificacion
@@ -108,7 +117,12 @@ class Agenda:
         return f"Usuario {usuarioexixtente.nombre} eliminado con exito"
 
     def mostrar_todos(self):
-        return self.__pasar_lista_dataframe()
+        return self.__pasar_lista_dataframe(self.__todos_los_usuarios())
+
+    def mortar_bando(self, bando):
+        lista = self.__obtener_lista_por_nombre_bando(bando)
+        return self.__pasar_lista_dataframe(lista)
+
 
     def buscar(self, query):
         df = self.mostrar_todos()
@@ -149,7 +163,7 @@ class Agenda:
 
     def crear_excel_contactos(self):
         try:
-            df = self.__pasar_lista_dataframe()
+            df = self.__pasar_lista_dataframe(self.__todos_los_usuarios())
             df.to_excel("Agenda_de_contactos.xlsx", index=False)
             return "Agenda_de_contactos.xlsx creado con exito"
         except Exception:
@@ -190,7 +204,7 @@ class Agenda:
         if not erroralumno :
             return f"No existe usuario {usuariosensiblealafuerza_alumno.nombre}"
         if not errormaestro:
-            return f"No existe usuario con ID {usuariosensiblealafuerza_maestro.nombre}"
+            return f"No existe usuario {usuariosensiblealafuerza_maestro.nombre}"
         if alumno.id == maestro.id:
             return "Un usuario no puede ser su propio maestro"
 
@@ -209,7 +223,7 @@ class Agenda:
         if not erroralumno:
             return f"No existe usuario {usuariosensiblealafuerza_alumno.nombre}"
         if not errormaestro:
-            return f"No existe usuario con ID {usuariosensiblealafuerza_maestro.nombre}"
+            return f"No existe usuario {usuariosensiblealafuerza_maestro.nombre}"
         if alumno.id == maestro.id:
             return "Un usuario no puede ser su propio maestro"
 
