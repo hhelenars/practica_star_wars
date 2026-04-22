@@ -101,7 +101,7 @@ class Agenda:
             df = self.__pasar_lista_dataframe()
             df.to_excel("Agenda_de_contactos.xlsx",  index=False)
             return "Agenda_de_contactos.xlsx creado con exito"
-        except:
+        except Exception:
             return "No se ha podido crear Agenda_de_contactos.xlsx"
 
 

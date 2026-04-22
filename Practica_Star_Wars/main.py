@@ -112,16 +112,16 @@ def modificar_usuario(usuarioseleccionado):
 
     if '1' in cambiar:
         nombrenuevo = pedir_nombre()
-        usuarioseleccionado.nombre(nombrenuevo)
+        usuarioseleccionado.nombre = nombrenuevo
     if '2' in cambiar:
         if usuarioseleccionado.__class__.__name__ == "Fuerza":
             rango = pedir_rango_fuerza()
         else :
             rango = pedir_rango_ladooscuro()
-        usuarioseleccionado.rango(rango)
+        usuarioseleccionado.rango = rango
     if '3' in cambiar:
         nivelpoder = pedir_nivelpoder()
-        usuarioseleccionado.nivelpoder(nivelpoder)
+        usuarioseleccionado.nivelpoder = nivelpoder
 
     return usuarioseleccionado
 
@@ -253,7 +253,7 @@ while True:
                     usuario = indentificar_usuario()
                     print("-------------------------------------------")
                     print("ELIMINAR USUARIO A FAVORITOS")
-                    print(Fore.YELLOW + Style.BRIGHT + agenda.eliminar(usuario) + Style.RESET_ALL)
+                    print(Fore.YELLOW + Style.BRIGHT + agenda.eliminar_favoritos(usuario) + Style.RESET_ALL)
                 case 3:
                     print(Fore.YELLOW + Style.BRIGHT)
                     print(agenda.mostrar_favoritos())
