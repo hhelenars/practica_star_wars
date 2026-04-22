@@ -186,12 +186,14 @@ def menu_agenda():
     print("5. Buscar por nombre, por rango o por nivel de poder.")
     print("6. Mostrar toda la agenda")
     print("7. Cambiara de lado a un sith/jedi.")
-    print("8. Favoritos")
-    print("9. Crear un excel de contactos")
-    print("10. Salir")
+    print("8. Asignar maestros a un sith/jedi.")
+    print("9. Eliminar maestros a un sith/jedi.")
+    print("10. Favoritos")
+    print("11. Crear un excel de contactos")
+    print("12. Salir")
     print("-------------------------------------------")
     instruccion = pedir_instruccion()
-    while instruccion < 1 or instruccion > 10:
+    while instruccion < 1 or instruccion > 12:
         print("El numero es incorrecto")
         instruccion = pedir_instruccion()
     return instruccion
@@ -255,8 +257,24 @@ while True:
             bando = pedir_bando()
             print(Fore.YELLOW + Style.BRIGHT + agenda.cambiar_bando(usuario, bando) + Style.RESET_ALL)
 
-
         case 8:
+            usuarioalumno = indentificar_usuario()
+            print("-------------------------------------------")
+            print("ASIGNAR UN MAESTRO A UN USUARIO")
+            print("Identificar al maestro")
+            usuariomaestro = indentificar_usuario()
+            print(Fore.YELLOW + Style.BRIGHT + agenda.asignar_maestro(usuarioalumno, usuariomaestro) + Style.RESET_ALL)
+
+        case 9:
+            usuarioalumno = indentificar_usuario()
+            print("-------------------------------------------")
+            print("ELIMINAR UN MAESTRO A UN USUARIO")
+            print("Identificar al maestro")
+            usuariomaestro = indentificar_usuario()
+            print(Fore.YELLOW + Style.BRIGHT + agenda.quitar_maestro(usuarioalumno, usuariomaestro) + Style.RESET_ALL)
+
+
+        case 10:
             instruccion_facorito = menu_favoritos()
             match instruccion_facorito:
                 case 1:
@@ -273,12 +291,12 @@ while True:
                     print(Fore.YELLOW + Style.BRIGHT)
                     print(agenda.mostrar_favoritos())
                     print(Style.RESET_ALL)
-        case 9:
+        case 11:
             print("-------------------------------------------")
             print("CREAR UN EXCEL")
             print(Fore.YELLOW + Style.BRIGHT + agenda.crear_excel_contactos() + Style.RESET_ALL)
 
-        case 10:
+        case 12:
             print("QUE LA FUERZA TE ACOMPAÑE")
             sys.exit()
 

@@ -7,6 +7,7 @@ class Agenda:
         self.__listafuerza = list()
         self.__listaladooscuro = list()
         self.__limite_por_bando = 50
+        self.__siguiente_id = 1
 
     def __obtener_lista_por_nombre_bando(self, nombre_bando):
         if nombre_bando == "Fuerza":
@@ -49,6 +50,8 @@ class Agenda:
             return True
         return False
 
+
+
     def anadir_usuario(self, usuariosensiblealafuerza):
         error, _ = self.__usuario_exixtente(usuariosensiblealafuerza)
         if error:
@@ -58,6 +61,8 @@ class Agenda:
             return f"No se puede añadir un nuevo usuario a ese bando, supera el límite permitido"
 
         listabando = self.__obtener_lista_por_usuario(usuariosensiblealafuerza)
+        usuariosensiblealafuerza.asignar_id_agenda(self.__siguiente_id)
+        self.__siguiente_id += 1
         listabando.append(usuariosensiblealafuerza)
         return f"Usuario {usuariosensiblealafuerza.nombre} añadido con exito"
 
@@ -159,6 +164,42 @@ class Agenda:
             return dffavoritos
         dffavoritos = dffavoritos[dffavoritos['Favoritos'] == True]
         return dffavoritos.drop(columns=['Favoritos'])
+
+    def asignar_maestro(self, usuariosensiblealafuerza_alumno, usuariosensiblealafuerza_maestro):
+        erroralumno, alumno = self.__usuario_exixtente(usuariosensiblealafuerza_alumno)
+        errormaestro, maestro =self.__usuario_exixtente(usuariosensiblealafuerza_maestro)
+
+        if not erroralumno :
+            return f"No existe usuario {usuariosensiblealafuerza_alumno.nombre}"
+        if not errormaestro:
+            return f"No existe usuario con ID {usuariosensiblealafuerza_maestro.nombre}"
+        if alumno.id == maestro.id:
+            return "Un usuario no puede ser su propio maestro"
+
+        if maestro.id in alumno.maestros_ids:
+            return "La relación maestro/alumno ya existe"
+
+        alumno.maestros_ids.append(maestro.id)
+        maestro.alumnos_ids.append(alumno.id)
+
+        return f"El usuario {maestro.nombre} es maestro de {alumno.nombre}"
+
+    def quitar_maestro(self, usuariosensiblealafuerza_alumno, usuariosensiblealafuerza_maestro):
+        erroralumno, alumno = self.__usuario_exixtente(usuariosensiblealafuerza_alumno)
+        errormaestro, maestro = self.__usuario_exixtente(usuariosensiblealafuerza_maestro)
+
+        if not erroralumno:
+            return f"No existe usuario {usuariosensiblealafuerza_alumno.nombre}"
+        if not errormaestro:
+            return f"No existe usuario con ID {usuariosensiblealafuerza_maestro.nombre}"
+        if alumno.id == maestro.id:
+            return "Un usuario no puede ser su propio maestro"
+
+        alumno.maestros_ids.remove(usuariosensiblealafuerza_maestro.id)
+        if alumno.id in maestro.alumnos_ids:
+            maestro.alumnos_ids.remove(alumno.id)
+
+        return f"El usuario {maestro.nombre} ya no es maestro de {alumno.nombre}"
 
 
 

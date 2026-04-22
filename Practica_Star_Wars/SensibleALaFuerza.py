@@ -4,13 +4,14 @@ import pandas as pd
 class SensibleALaFuerza:
 
     def __init__(self, nombre, rango, nivelpoder, movil):
+        self.__id = None
         self.__nombre = nombre
         self.__rango = rango
         self.__nivelpoder = nivelpoder
         self.__favoritos = False
         self.__movil = movil
-
-
+        self.__maestros_ids = list()
+        self.__alumnos_ids = list()
 
     @property
     def nombre(self):
@@ -51,6 +52,30 @@ class SensibleALaFuerza:
     @movil.setter
     def movil(self, movil):
         self.__movil = movil
+
+    @property
+    def id(self):
+        return self.__id
+
+    def asignar_id_agenda(self, id):
+        self.__id = id
+
+    @property
+    def maestros_ids(self):
+        return self.__maestros_ids
+
+    @maestros_ids.setter
+    def maestros_ids(self, maestros_ids):
+        self.__maestros_ids = maestros_ids
+
+    @property
+    def alumnos_ids(self):
+        return self.__alumnos_ids
+
+    @alumnos_ids.setter
+    def alumnos_ids(self, alumnos_ids):
+        self.__alumnos_ids = alumnos_ids
+
 
     def to_dict (self):
         return {'Nombre': self.nombre,
