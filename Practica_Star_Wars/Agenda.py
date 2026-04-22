@@ -22,6 +22,12 @@ class Agenda:
     def __todos_los_usuarios(self):
         return self.__listafuerza + self.__listaladooscuro
 
+    def __buscar_usuario_por_id(self, id_usuario):
+        for usuario in self.__todos_los_usuarios():
+            if usuario.id == id_usuario:
+                return f"Nombre: {usuario.nombre} Bando: {usuario.__class__.__name__}"
+        return None
+
     def __usuario_exixtente(self, usuariosensiblealafuerza):
         listabando = self.__obtener_lista_por_usuario(usuariosensiblealafuerza)
         if listabando is None:
@@ -74,13 +80,23 @@ class Agenda:
         listabando = self.__obtener_lista_por_usuario(usuariosensiblealafuerza)
         indice = listabando.index(usuarioexixtente)
         listabando[indice] = modificacion
+        modificacion.asignar_id_agenda(usuarioexixtente.id)
+        modificacion.favoritos = usuarioexixtente.favoritos
+        modificacion.maestros_ids = list(usuarioexixtente.maestros_ids)
+        modificacion.alumnos_ids = list(usuarioexixtente.alumnos_ids)
         return f"Usuario  {usuarioexixtente.nombre} modificado con exito"
 
     def consultar(self, usuariosensiblealafuerza):
         error, usuarioexixtente = self.__usuario_exixtente(usuariosensiblealafuerza)
         if not error:
             return f"El usuario {usuariosensiblealafuerza.nombre} no existe"
-        return pd.Series(usuarioexixtente.to_dict())
+
+        maestros = [self.__buscar_usuario_por_id(i) for i in usuarioexixtente.maestros_ids]
+        alumnos = [self.__buscar_usuario_por_id(i) for i in usuarioexixtente.alumnos_ids]
+        respuesta =  usuarioexixtente.to_dict()
+        respuesta["Maestros"] = maestros
+        respuesta["Alumnos"] = alumnos
+        return pd.Series(respuesta)
 
     def eliminar(self, usuariosensiblealafuerza):
         error, usuarioexixtente = self.__usuario_exixtente(usuariosensiblealafuerza)
@@ -110,7 +126,8 @@ class Agenda:
             limitebando = self.__limite_bando("Fuerza")
             if not limitebando:
                 return f"No se puede cambiar de bando al usuario, supera el límite permitido"
-            nuevousuario = Fuerza(usuarioexixtente.nombre, usuarioexixtente.rango, usuarioexixtente.nivelpoder, usuarioexixtente.movil)
+            nuevousuario = Fuerza(usuarioexixtente.nombre, usuarioexixtente.rango, usuarioexixtente.nivelpoder, usuarioexixtente.movil, list(usuarioexixtente.maestros_ids), list(usuarioexixtente.alumnos_ids))
+            nuevousuario.asignar_id_agenda(usuarioexixtente.id)
             nuevousuario.favoritos = usuarioexixtente.favoritos
             self.__listaladooscuro.remove(usuarioexixtente)
             self.__listafuerza.append(nuevousuario)
@@ -121,7 +138,8 @@ class Agenda:
             limitebando = self.__limite_bando("LadoOscuro")
             if not limitebando:
                 return f"No se puede cambiar de bando al usuario, supera el límite permitido"
-            nuevousuario = LadoOscuro(usuarioexixtente.nombre, usuarioexixtente.rango, usuarioexixtente.nivelpoder, usuarioexixtente.movil)
+            nuevousuario = LadoOscuro(usuarioexixtente.nombre, usuarioexixtente.rango, usuarioexixtente.nivelpoder, usuarioexixtente.movil, list(usuarioexixtente.maestros_ids), list(usuarioexixtente.alumnos_ids))
+            nuevousuario.asignar_id_agenda(usuarioexixtente.id)
             nuevousuario.favoritos = usuarioexixtente.favoritos
             self.__listafuerza.remove(usuarioexixtente)
             self.__listaladooscuro.append(nuevousuario)
@@ -195,7 +213,7 @@ class Agenda:
         if alumno.id == maestro.id:
             return "Un usuario no puede ser su propio maestro"
 
-        alumno.maestros_ids.remove(usuariosensiblealafuerza_maestro.id)
+        alumno.maestros_ids.remove(maestro.id)
         if alumno.id in maestro.alumnos_ids:
             maestro.alumnos_ids.remove(alumno.id)
 

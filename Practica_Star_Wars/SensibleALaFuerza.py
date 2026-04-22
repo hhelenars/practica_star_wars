@@ -1,17 +1,17 @@
 import pandas as pd
-
+from Agenda import Agenda
 
 class SensibleALaFuerza:
 
-    def __init__(self, nombre, rango, nivelpoder, movil):
+    def __init__(self, nombre, rango, nivelpoder, movil, listamaestros=None, listaalumnos=None):
         self.__id = None
         self.__nombre = nombre
         self.__rango = rango
         self.__nivelpoder = nivelpoder
         self.__favoritos = False
         self.__movil = movil
-        self.__maestros_ids = list()
-        self.__alumnos_ids = list()
+        self.__maestros_ids = listamaestros
+        self.__alumnos_ids = listaalumnos
 
     @property
     def nombre(self):
@@ -96,5 +96,5 @@ class SensibleALaFuerza:
         return (f"Nombre: {self.__nombre}\n"
                 f"Bando: {self.__class__.__name__}\n"
                 f"Rango: {self.__rango}\n"
-                 f"Nivel de poder: {self.__nivelpoder}\n"
-                f"Móvil: {self.__movil}")
+                f"Nivel de poder: {self.__nivelpoder}\n"
+                f"Móvil: {self.__movil}\n")
