@@ -176,7 +176,7 @@ def menu_agenda():
     print("10. Salir")
     print("-------------------------------------------")
     instruccion = pedir_instruccion()
-    while instruccion < 1 or instruccion > 9:
+    while instruccion < 1 or instruccion > 10:
         print("El numero es incorrecto")
         instruccion = pedir_instruccion()
     return instruccion
