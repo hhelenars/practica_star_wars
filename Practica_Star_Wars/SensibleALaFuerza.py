@@ -3,11 +3,12 @@ import pandas as pd
 
 class SensibleALaFuerza:
 
-    def __init__(self, nombre, rango, nivelpoder):
+    def __init__(self, nombre, rango, nivelpoder, movil):
         self.__nombre = nombre
         self.__rango = rango
         self.__nivelpoder = nivelpoder
         self.__favoritos = False
+        self.__movil = movil
 
 
 
@@ -43,21 +44,32 @@ class SensibleALaFuerza:
     def favoritos(self, favoritos):
         self.__favoritos = favoritos
 
+    @property
+    def movil(self):
+        return self.__movil
+
+    @movil.setter
+    def movil(self, movil):
+        self.__movil = movil
+
     def to_dict (self):
         return {'Nombre': self.nombre,
                 'Bando': self.__class__.__name__,
                 'Rango': self.rango,
-                'Nivel de poder': self.nivelpoder}
+                'Nivel de poder': self.nivelpoder,
+                'Móvil': self.movil}
 
     def to_dict_favoritos (self):
         return {'Nombre': self.nombre,
                 'Bando': self.__class__.__name__,
                 'Rango': self.rango,
                 'Nivel de poder': self.nivelpoder,
+                'Móvil': self.movil,
                 'Favoritos': self.favoritos}
 
     def __str__(self):
         return (f"Nombre: {self.__nombre}\n"
                 f"Bando: {self.__class__.__name__}\n"
                 f"Rango: {self.__rango}\n"
-                f"Nivel de poder: {self.__nivelpoder}")
+                 f"Nivel de poder: {self.__nivelpoder}\n"
+                f"Móvil: {self.__movil}")

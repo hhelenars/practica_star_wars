@@ -22,6 +22,16 @@ def pedir_nombre():
         return pedir_nombre()
     return nombre
 
+def pedir_movil():
+    movil = input("Ingrese el teléfono móvil (9 dígitos mínimo): ").strip()
+    if not movil.isdigit():
+        print(Fore.RED+ Style.BRIGHT + "El móvil debe contener solo números" + Style.RESET_ALL)
+        return pedir_movil()
+    if len(movil) < 9:
+        print(Fore.RED+ Style.BRIGHT + "El móvil debe tener al menos 9 dígitos" + Style.RESET_ALL)
+        return pedir_movil()
+    return movil
+
 def pedir_nivelpoder():
     try:
         nivelpoder = int(input("Ingrese el nivel de poder (max 1000): "))
@@ -70,14 +80,15 @@ def crear_sesiblealafuerza():
     print("-------------------------------------------")
     print("CREAR USUARIO")
     nombre = pedir_nombre()
+    movil = pedir_movil()
     nivelpoder = pedir_nivelpoder()
     bando = pedir_bando()
     if bando == 1:
         rango = pedir_rango_fuerza()
-        return Fuerza(nombre, rango, nivelpoder)
+        return Fuerza(nombre, rango, nivelpoder, movil)
     else:
         rango = pedir_rango_ladooscuro()
-        return LadoOscuro(nombre, rango, nivelpoder)
+        return LadoOscuro(nombre, rango, nivelpoder, movil)
 
 
 def indentificar_usuario():
@@ -86,9 +97,9 @@ def indentificar_usuario():
     nombre = pedir_nombre()
     bando = pedir_bando()
     if bando == 1:
-        return Fuerza(nombre, None, None)
+        return Fuerza(nombre, None, None, None)
     else:
-        return LadoOscuro(nombre,None, None)
+        return LadoOscuro(nombre,None, None, None)
 
 
 def modificar_usuario(usuarioseleccionado):
@@ -96,30 +107,34 @@ def modificar_usuario(usuarioseleccionado):
     print("MODIFICAR USUARIO")
     print("¿Que desea modificar?")
     print("1.Nombre")
-    print("2.Rango")
-    print("3.Nivel de poder")
-    cambiar = list(input("Introduce los números separados por comas (1,2,3) en caso de que desee modificar diferentes cosas: ").split(","))
+    print("2.Movil")
+    print("3.Rango")
+    print("4.Nivel de poder")
+    cambiar = list(input("Introduce los números separados por comas (1,2,3,4) en caso de que desee modificar diferentes cosas: ").split(","))
     for numero in cambiar:
         try:
             numero_correcto = int(numero)
-            if numero_correcto not in [1,2,3]:
+            if numero_correcto not in [1,2,3,4]:
                 print("El numero introducido no es valido")
                 return modificar_usuario(usuarioseleccionado)
 
         except ValueError:
-            print("Introduzca números entre [1-3]")
+            print("Introduzca números entre [1-4]")
             return modificar_usuario(usuarioseleccionado)
 
     if '1' in cambiar:
         nombrenuevo = pedir_nombre()
         usuarioseleccionado.nombre = nombrenuevo
     if '2' in cambiar:
+        movil = pedir_movil()
+        usuarioseleccionado.movil = movil
+    if '3' in cambiar:
         if usuarioseleccionado.__class__.__name__ == "Fuerza":
             rango = pedir_rango_fuerza()
         else :
             rango = pedir_rango_ladooscuro()
         usuarioseleccionado.rango = rango
-    if '3' in cambiar:
+    if '4' in cambiar:
         nivelpoder = pedir_nivelpoder()
         usuarioseleccionado.nivelpoder = nivelpoder
 
