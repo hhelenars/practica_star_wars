@@ -105,7 +105,7 @@ class Agenda:
             limitebando = self.__limite_bando("Fuerza")
             if not limitebando:
                 return f"No se puede cambiar de bando al usuario, supera el límite permitido"
-            nuevousuario = Fuerza(usuarioexixtente.nombre, usuarioexixtente.rango, usuarioexixtente.nivelpoder)
+            nuevousuario = Fuerza(usuarioexixtente.nombre, usuarioexixtente.rango, usuarioexixtente.nivelpoder, usuarioexixtente.movil)
             nuevousuario.favoritos = usuarioexixtente.favoritos
             self.__listaladooscuro.remove(usuarioexixtente)
             self.__listafuerza.append(nuevousuario)
@@ -116,7 +116,7 @@ class Agenda:
             limitebando = self.__limite_bando("LadoOscuro")
             if not limitebando:
                 return f"No se puede cambiar de bando al usuario, supera el límite permitido"
-            nuevousuario = LadoOscuro(usuarioexixtente.nombre, usuarioexixtente.rango, usuarioexixtente.nivelpoder)
+            nuevousuario = LadoOscuro(usuarioexixtente.nombre, usuarioexixtente.rango, usuarioexixtente.nivelpoder, usuarioexixtente.movil)
             nuevousuario.favoritos = usuarioexixtente.favoritos
             self.__listafuerza.remove(usuarioexixtente)
             self.__listaladooscuro.append(nuevousuario)
