@@ -1,9 +1,8 @@
 import pandas as pd
-from Agenda import Agenda
 
 class SensibleALaFuerza:
 
-    def __init__(self, nombre, rango, nivelpoder, movil, listamaestros=None, listaalumnos=None):
+    def __init__(self, nombre, rango, nivelpoder, movil, listamaestros=list(), listaalumnos=list()):
         self.__id = None
         self.__nombre = nombre
         self.__rango = rango
@@ -78,7 +77,8 @@ class SensibleALaFuerza:
 
 
     def to_dict (self):
-        return {'Nombre': self.nombre,
+        return {'ID': self.__id,
+            'Nombre': self.nombre,
                 'Bando': self.__class__.__name__,
                 'Rango': self.rango,
                 'Nivel de poder': self.nivelpoder,
